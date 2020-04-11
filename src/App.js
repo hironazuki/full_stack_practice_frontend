@@ -51,7 +51,7 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already deleted from server`
         )
@@ -112,12 +112,12 @@ const App = () => {
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important === true)
-    
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
-      {user === null ? 
+      {user === null ?
         loginForm() :
         <div>
           <p>{user.name} logged in</p>
