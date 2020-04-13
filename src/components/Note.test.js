@@ -14,7 +14,7 @@ test('renders content', () => {
   const component = render(
     <Note note={note} toggleImportance={mockHandler} />
   )
-  
+
   const button = component.getByText('make not important')
   fireEvent.click(button)
 
