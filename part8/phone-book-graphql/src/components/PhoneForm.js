@@ -3,26 +3,30 @@ import { useMutation } from '@apollo/client'
 
 import { EDIT_NUMBER } from '../queries'
 
-const PhoneForm = ({ setError }) => {
+const PhoneForm = ({ notify }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
 
-  const [ changeNumber, result ] = useMutation(EDIT_NUMBER)
+  const [ changeNumber, result ] = useMutation(EDIT_NUMBER, {
+    onError: (error) => {
+      notify(error.graphQLErrors[0].message)
+    },
+  })
+
+  useEffect(() => {
+    if (result.data && !result.data.editNumber) {
+      notify('name not found')
+    }
+  }, [result.data]) // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault()
 
     await changeNumber({ variables: { name, phone } })
-    console.log(result.data)
+
     setName('')
     setPhone('')
   }
-  
-  useEffect(() => {
-    if (result.data && result.data.editNumber === null) {
-      setError('person not found')
-    }
-  }, [result.data])
 
   return (
     <div>
